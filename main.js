@@ -287,6 +287,9 @@ function drawBars(){
         else if (barColor[i]=="partition"){
             fill(0,84,12);
         }
+        else if (barColor[i]=="sorted"){
+            fill(144,89,255);
+        }
         stroke(backgroundColor);
         if (numberOfBars< 28){
             strokeWeight(barWidth*0.05);
@@ -318,10 +321,10 @@ async function BubbleSort(array){
                 await ASYNCswap(array, j, j+1);
             }
 
-            //await sleep(msDelay);
             barColor[j] = "default";
             barColor[j+1] = "default";
         }
+        barColor[array.length-i-1] = "sorted";
     }
 }
 
@@ -390,7 +393,6 @@ async function InsertionSort(array){
         }
         barColor[j]="default"
         barColor[temp] = "default";
-        barColor[i]="default";
     }
 }
 
@@ -410,7 +412,7 @@ async function SelectionSort(array){
             barColor[j] = "default";
         }
         await ASYNCswap(array, minIndex, i);
-        barColor[i] = "default";
+        barColor[i] = "sorted";
     }
 
 
