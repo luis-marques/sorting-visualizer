@@ -1,5 +1,5 @@
 /*
-Selection Sort
+- Selection Sort
 - Insertion Sort
 - Quick Sort
 Merge Sort
@@ -18,9 +18,11 @@ could show the value milissecond delay added to the visualization
 
 Tried doing single coordinate for buttons do rectangle instead
 
-Need to find a better way to determine when the sorting has ended!!!!
+Sorting has ended when all bars are purple
 
 Could add legend on the bottom explaining what the colors are
+
+Heap visualization is kinda week gonna think about which parts are worth coloring
  */
 
 
@@ -43,7 +45,7 @@ let sortingType = "not defined";
 var barColor = [];
 
 var buttons = {"bubble sort": "not pressed", "quick sort": "not pressed", "sort button": "not pressed",
-    "insertion sort": "not pressed", "selection sort": "not pressed"};
+    "insertion sort": "not pressed", "selection sort": "not pressed", "bitonic sort": "not pressed", "heap sort": "not pressed"};
 
 function setup(){
     canvas = createCanvas(windowWidth, windowHeight);
@@ -141,6 +143,14 @@ async function draw(){
             SelectionSort(barSize);
             restorePickingSorter();
         }
+        else if(sortingType == "bitonic sort"){
+            BitonicSort(barSize);
+            restorePickingSorter();
+        }
+        else if(sortingType == "heap sort"){
+            HeapSort(barSize);
+            restorePickingSorter();
+        }
     }
 }
 
@@ -199,8 +209,24 @@ function drawSortNames(){
     }
     text("Selection Sort", windowWidth*0.4, windowHeight*0.04);
 
+    // Bitonic Sort
+    fill(255,0,0);
+    if (buttons["bitonic sort"]=="not pressed") {
+        fill(menuTextColor);
+    }
+    if(sortingType=="bitonic sort"){
+        fill(255, 73, 73);
+    }
+    text("Bitonic Sort", windowWidth*0.5, windowHeight*0.04);
+
     // Heap Sort
-    fill(menuTextColor);
+    fill(255,0,0);
+    if (buttons["heap sort"]=="not pressed") {
+        fill(menuTextColor);
+    }
+    if(sortingType=="heap sort"){
+        fill(255, 73, 73);
+    }
     text("Heap Sort", windowWidth*0.4, windowHeight*0.08);
 }
 
@@ -213,6 +239,8 @@ function drawSortRectangles(){
     quickRect = rect(windowWidth*0.2, windowHeight*0.07, windowHeight*0.14, windowHeight*0.03);
     insertionRect = rect(windowWidth*0.3, windowHeight*0.03, windowHeight*0.18, windowHeight*0.03);
     selectionRect = rect(windowWidth*0.4, windowHeight*0.03, windowHeight*0.19, windowHeight*0.03);
+    bitonicRect = rect(windowWidth*0.5, windowHeight*0.03, windowHeight*0.155, windowHeight*0.03);
+    heapRect = rect(windowWidth*0.4, windowHeight*0.07, windowHeight*0.135, windowHeight*0.035);
 
     sortRect = rect(windowWidth*0.9, windowHeight*0.05, windowHeight*0.085, windowHeight*0.04);
 
@@ -253,6 +281,19 @@ function overButtons(){
     else{
         buttons["selection sort"] = "not pressed";
     }
+    if ((mouseX > windowWidth*0.5 - windowHeight*0.155/2) && mouseX < (windowWidth*0.5+windowHeight*0.155/2) && (mouseY > windowHeight*0.03-windowHeight*0.03/2) && mouseY < (windowHeight*0.03 + windowHeight*0.03/2)){
+        buttons["bitonic sort"] = "pressed";
+    }
+    else{
+        buttons["bitonic sort"] = "not pressed";
+    }
+
+    if ((mouseX > windowWidth*0.4 - windowHeight*0.135/2) && mouseX < (windowWidth*0.4+windowHeight*0.135/2) && (mouseY > windowHeight*0.07-windowHeight*0.035/2) && mouseY < (windowHeight*0.07 + windowHeight*0.035/2)){
+        buttons["heap sort"] = "pressed";
+    }
+    else{
+        buttons["heap sort"] = "not pressed";
+    }
 }
 
 function mousePressed(){
@@ -269,6 +310,12 @@ function mousePressed(){
     }
     if (buttons["selection sort"] == "pressed"){
         sortingType = "selection sort";
+    }
+    if (buttons["bitonic sort"] == "pressed"){
+        sortingType = "bitonic sort";
+    }
+    if (buttons["heap sort"] == "pressed"){
+        sortingType = "heap sort";
     }
 
     if (buttons["sort button"] == "pressed"){
@@ -417,6 +464,60 @@ async function SelectionSort(array){
 
 
 }
+
+function BitonicSort(array){
+}
+
+async function HeapSort(array) {
+
+    heap_size = array.length;
+
+    await BuildMaxHeap(array);
+
+    for (i = heap_size- 1; i > 0; i--) {
+        barColor[i] = "sorted";
+        await ASYNCswap(array, 0, i);
+        heap_size--;
+        await Heapify(array, 0);
+    }
+    await sleep(msDelay);
+    barColor[0] = "sorted";
+}
+
+async function Heapify(array, i) {
+    var left = 2 * i + 1;
+    var right = 2 * i + 2;
+    var largest = i;
+
+    barColor[largest] = "pivot";
+
+    if (left < heap_size && array[left] > array[largest]) {
+        await sleep(msDelay/2);
+        barColor[largest] = "default";
+        largest = left;
+        barColor[largest] = "partition";
+    }
+    if (right < heap_size && array[right] > array[largest])     {
+        await sleep(msDelay/2);
+        barColor[largest] = "default";
+        largest = right;
+        barColor[largest] = "partition";
+    }
+
+    if (largest != i) {
+        await ASYNCswap(array, i, largest);
+        await Heapify(array, largest);
+    }
+    barColor[largest] = "default";
+}
+
+async function BuildMaxHeap(array){
+    for (let i = Math.floor(heap_size / 2); i >= 0; i -= 1)      {
+        await Heapify(array, i);
+    }
+}
+
+
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
