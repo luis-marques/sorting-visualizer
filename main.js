@@ -1,6 +1,6 @@
 /*
 Selection Sort
-Insertion Sort
+- Insertion Sort
 - Quick Sort
 Merge Sort
 Heap Sort
@@ -42,7 +42,8 @@ let sortingType = "not defined";
 
 var barColor = [];
 
-var buttons = {"bubble sort": "not pressed", "quick sort": "not pressed", "sort button": "not pressed"};
+var buttons = {"bubble sort": "not pressed", "quick sort": "not pressed", "sort button": "not pressed",
+    "insertion sort": "not pressed", "selection sort": "not pressed"};
 
 function setup(){
     canvas = createCanvas(windowWidth, windowHeight);
@@ -126,11 +127,18 @@ async function draw(){
 
         if (sortingType == "bubble sort"){
             BubbleSort(barSize);
-            await sleep(msDelay*(numberOfBars-1)); // prob not best idea
             restorePickingSorter();
         }
         else if(sortingType == "quick sort"){
             QuickSort(barSize, 0, numberOfBars-1);
+            restorePickingSorter();
+        }
+        else if(sortingType == "insertion sort"){
+            InsertionSort(barSize);
+            restorePickingSorter();
+        }
+        else if(sortingType == "selection sort"){
+            SelectionSort(barSize);
             restorePickingSorter();
         }
     }
@@ -146,26 +154,35 @@ function drawSortNames(){
     textAlign(CENTER);
     textSize(windowHeight*0.03);
 
+
     // Bubble Sort
+    fill(255,0,0)
     if (buttons["bubble sort"]=="not pressed") {
         fill(menuTextColor);
     }
-    else{
-        fill(255,0,0);
+    if(sortingType=="bubble sort"){
+        fill(255, 73, 73);
     }
     text("Bubble Sort", windowWidth*0.2, windowHeight*0.04);
 
     // Quick Sort
+    fill(255,0,0);
     if (buttons["quick sort"]=="not pressed") {
         fill(menuTextColor);
     }
-    else{
-        fill(255,0,0);
+    if(sortingType=="quick sort"){
+        fill(255, 73, 73);
     }
     text("Quick Sort", windowWidth*0.2, windowHeight*0.08);
 
     // Insertion Sort
-    fill(menuTextColor);
+    fill(255,0,0);
+    if (buttons["insertion sort"]=="not pressed") {
+        fill(menuTextColor);
+    }
+    if(sortingType=="insertion sort"){
+        fill(255, 73, 73);
+    }
     text("Insertion Sort", windowWidth*0.3, windowHeight*0.04);
 
     // Merge Sort
@@ -173,7 +190,13 @@ function drawSortNames(){
     text("Merge Sort", windowWidth*0.3, windowHeight*0.08);
 
     // Selection Sort
-    fill(menuTextColor);
+    fill(255,0,0);
+    if (buttons["selection sort"]=="not pressed") {
+        fill(menuTextColor);
+    }
+    if(sortingType=="selection sort"){
+        fill(255, 73, 73);
+    }
     text("Selection Sort", windowWidth*0.4, windowHeight*0.04);
 
     // Heap Sort
@@ -188,6 +211,8 @@ function drawSortRectangles(){
 
     bubbleRect = rect(windowWidth*0.2, windowHeight*0.03, windowHeight*0.16, windowHeight*0.03);
     quickRect = rect(windowWidth*0.2, windowHeight*0.07, windowHeight*0.14, windowHeight*0.03);
+    insertionRect = rect(windowWidth*0.3, windowHeight*0.03, windowHeight*0.18, windowHeight*0.03);
+    selectionRect = rect(windowWidth*0.4, windowHeight*0.03, windowHeight*0.19, windowHeight*0.03);
 
     sortRect = rect(windowWidth*0.9, windowHeight*0.05, windowHeight*0.085, windowHeight*0.04);
 
@@ -214,6 +239,20 @@ function overButtons(){
     else{
         buttons["sort button"] = "not pressed";
     }
+
+    if ((mouseX > windowWidth*0.3 - windowHeight*0.18/2) && mouseX < (windowWidth*0.3+windowHeight*0.18/2) && (mouseY > windowHeight*0.03-windowHeight*0.03/2) && mouseY < (windowHeight*0.03 + windowHeight*0.03/2)){
+        buttons["insertion sort"] = "pressed";
+    }
+    else{
+        buttons["insertion sort"] = "not pressed";
+    }
+
+    if ((mouseX > windowWidth*0.4 - windowHeight*0.19/2) && mouseX < (windowWidth*0.4+windowHeight*0.19/2) && (mouseY > windowHeight*0.03-windowHeight*0.03/2) && mouseY < (windowHeight*0.03 + windowHeight*0.03/2)){
+        buttons["selection sort"] = "pressed";
+    }
+    else{
+        buttons["selection sort"] = "not pressed";
+    }
 }
 
 function mousePressed(){
@@ -223,6 +262,13 @@ function mousePressed(){
 
     if (buttons["quick sort"] == "pressed"){
         sortingType = "quick sort";
+    }
+
+    if (buttons["insertion sort"] == "pressed"){
+        sortingType = "insertion sort";
+    }
+    if (buttons["selection sort"] == "pressed"){
+        sortingType = "selection sort";
     }
 
     if (buttons["sort button"] == "pressed"){
@@ -263,15 +309,18 @@ function drawBars(){
 async function BubbleSort(array){
     for (i=0; i<array.length; i++){
         for (j=0; j<array.length-1-i;j++){
-
+            barColor[j] = "pivot";
+            barColor[j+1] = "partition";
             var a = array[j];
             var b = array[j+1];
 
             if (a>b){
-                swap(array, j, j+1);
+                await ASYNCswap(array, j, j+1);
             }
 
-            await sleep(msDelay);
+            //await sleep(msDelay);
+            barColor[j] = "default";
+            barColor[j+1] = "default";
         }
     }
 }
@@ -323,7 +372,49 @@ async function partition(array, start, end){
     return pivotIndex;
 }
 
+async function InsertionSort(array){
+    for (i=1; i<array.length;i++){
 
+        pivot = array[i];
+        barColor[i] = "pivot";
+
+        j = i-1;
+        temp = j;
+        barColor[j] = "partition";
+
+        while (j >=0 && array[j] > pivot){
+            await ASYNCswap(array, j+1, j);
+            j -=1;
+            barColor[j] = "partition";
+            barColor[j+1] = "default";
+        }
+        barColor[j]="default"
+        barColor[temp] = "default";
+        barColor[i]="default";
+    }
+}
+
+async function SelectionSort(array){
+
+    for (i=0;i<array.length;i++){
+
+        barColor[i] = "pivot";
+        var minIndex = i;
+
+        for (j=i+1;j<array.length;j++){
+            barColor[j] = "partition";
+            if (array[j] < array[minIndex]){
+                minIndex = j;
+            }
+            await sleep(msDelay/2);
+            barColor[j] = "default";
+        }
+        await ASYNCswap(array, minIndex, i);
+        barColor[i] = "default";
+    }
+
+
+}
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
