@@ -1,12 +1,12 @@
 /*
-- Selection Sort
-- Insertion Sort
-- Quick Sort
+- Selection Sort (w sorted color)
+- Insertion Sort (very questionable sorted color)
+- Quick Sort (w sorted color)
 Merge Sort
-Heap Sort
+- Heap Sort (w sorted color)
 Radix Sort
 Shell Sort
-- Bubble Sort
+- Bubble Sort (w sorted color)
 Cocktail Shaker Sort
 Gnome Sort
 Bitonic Sort
@@ -16,13 +16,14 @@ Put total time it took to sort the elements
 (BONUS: number of comparisons and number of array accesses)
 could show the value milissecond delay added to the visualization
 
-Tried doing single coordinate for buttons do rectangle instead
 
 Sorting has ended when all bars are purple
 
 Could add legend on the bottom explaining what the colors are
 
 Heap visualization is kinda week gonna think about which parts are worth coloring
+
+While Sorting Display Time Complexity Somewhere (bot left?)
  */
 
 
@@ -43,6 +44,8 @@ var sorting = false;
 let sortingType = "not defined";
 
 var barColor = [];
+var done;
+var runningSort = false;
 
 var buttons = {"bubble sort": "not pressed", "quick sort": "not pressed", "sort button": "not pressed",
     "insertion sort": "not pressed", "selection sort": "not pressed", "bitonic sort": "not pressed",
@@ -65,7 +68,7 @@ function setup(){
 }
 
 
-async function draw(){
+function draw(){
     background(backgroundColor);
 
 
@@ -120,6 +123,7 @@ async function draw(){
 
     rectMode(CORNER);
     if (sorting){
+        done = false;
         fill(255, 0, 0);
         noStroke();
         textAlign(CENTER);
@@ -128,36 +132,40 @@ async function draw(){
 
         slider.hide();
 
-        if (sortingType == "bubble sort"){
+        if (sortingType == "bubble sort" && runningSort == false){
+            runningSort = true;
             BubbleSort(barSize);
-            restorePickingSorter();
         }
-        else if(sortingType == "quick sort"){
+        else if(sortingType == "quick sort" && runningSort == false){
+            runningSort = true;
             QuickSort(barSize, 0, numberOfBars-1);
-            restorePickingSorter();
         }
-        else if(sortingType == "insertion sort"){
+        else if(sortingType == "insertion sort" && runningSort == false){
+            runningSort = true;
             InsertionSort(barSize);
-            restorePickingSorter();
         }
-        else if(sortingType == "selection sort"){
+        else if(sortingType == "selection sort" && runningSort == false){
+            runningSort = true;
             SelectionSort(barSize);
-            restorePickingSorter();
         }
-        else if(sortingType == "bitonic sort"){
+        else if(sortingType == "bitonic sort" && runningSort == false){
+            runningSort = true;
             BitonicSort(barSize);
-            restorePickingSorter();
         }
-        else if(sortingType == "merge sort"){
+        else if(sortingType == "merge sort" && runningSort == false){
+            runningSort = true;
             MergeSort(barSize);
-            restorePickingSorter();
         }
-        else if(sortingType == "heap sort"){
+        else if(sortingType == "heap sort" && runningSort == false){
+            runningSort = true;
             HeapSort(barSize);
-            restorePickingSorter();
         }
         else if(sortingType == "counting sort"){
+            runningSort = true;
             CountingSort(barSize);
+        }
+
+        if (detectSortingComplete(barSize)){
             restorePickingSorter();
         }
     }
@@ -166,6 +174,7 @@ async function draw(){
 function restorePickingSorter(){
     sorting = false;
     slider.show();
+    runningSort = false;
 }
 
 function drawSortNames(){
@@ -253,6 +262,15 @@ function drawSortNames(){
         fill(255, 73, 73);
     }
     text("Counting Sort", windowWidth*0.5, windowHeight*0.08);
+}
+
+function detectSortingComplete(array){
+    for (let i=0; i<array.length;i++){
+        if (barColor[i] != "sorted"){
+            return;
+        }
+    }
+    return true;
 }
 
 function drawSortRectangles(){
@@ -438,6 +456,11 @@ async function QuickSort(array, start, end){
         QuickSort(array, start, index-1),
         QuickSort(array, index+1, end)
     ]);
+
+    for (i=start; i<=end;i++){
+        barColor[i] = "sorted";
+    }
+    await sleep(msDelay/2);
 }
 
 async function partition(array, start, end){
@@ -486,8 +509,13 @@ async function InsertionSort(array){
             barColor[j] = "partition";
             barColor[j+1] = "default";
         }
+
         barColor[j]="default"
         barColor[temp] = "default";
+    }
+    await sleep(msDelay);
+    for (i=0; i<array.length;i++){
+        barColor[i] = "sorted";
     }
 }
 
