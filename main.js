@@ -30,6 +30,8 @@ While Sorting Display Time Complexity Somewhere (bot left?)
 var barSize = [];
 var numberOfBars;
 
+var bitonicMsg;
+
 var backgroundColor = 230;
 
 // Menu Colors
@@ -49,7 +51,8 @@ var runningSort = false;
 
 var buttons = {"bubble sort": "not pressed", "quick sort": "not pressed", "sort button": "not pressed",
     "insertion sort": "not pressed", "selection sort": "not pressed", "bitonic sort": "not pressed",
-    "heap sort": "not pressed", "counting sort": "not pressed", "merge sort": "not pressed", "generate array": "not pressed"};
+    "heap sort": "not pressed", "counting sort": "not pressed", "merge sort": "not pressed", "generate array": "not pressed",
+    "bitonic alert": "not pressed"};
 
 function setup(){
     canvas = createCanvas(windowWidth, windowHeight);
@@ -69,7 +72,7 @@ function setup(){
 }
 
 
-function draw(){
+async function draw(){
     background(backgroundColor);
 
 
@@ -179,12 +182,39 @@ function draw(){
             SelectionSort(barSize);
         }
         else if(sortingType == "bitonic sort" && runningSort == false){
-            runningSort = true;
-            BitonicSort(barSize);
+            if (powerOfTwo(numberOfBars)) {
+                runningSort = true;
+                BitonicSort(barSize);
+            }
+            else{
+                bitonicMsg = true;
+                if (bitonicMsg){
+                    rectMode(CENTER);
+                    fill(menuColor);
+                    strokeWeight(windowHeight * 0.02);
+                    stroke(menuDetailColorOffset + menuColor[0], menuDetailColorOffset + menuColor[1], menuDetailColorOffset + menuColor[2]);
+                    rect(windowWidth / 2, windowHeight / 2, windowWidth * 0.3, windowHeight * 0.36);
+                    rectMode(CORNER);
+                    noStroke();
+                    fill(menuTextColor);
+                    textSize(windowHeight * 0.04);
+                    text("Bitonic Sort only works on arrays\nwhere the number of elements is \n a power of two.\n Eg. n = 4, 8, 16, 32, 64", windowWidth / 2,
+                        windowHeight / 2 - windowHeight * 0.11);
+
+                    fill(255,0,0)
+                    if (buttons["bitonic alert"]=="not pressed") {
+                        fill(menuTextColor);
+                    }
+                    text ("Ok", windowWidth / 2, windowHeight / 2 + windowHeight*0.14);
+
+                    //rect(windowWidth / 2, windowHeight / 2 + windowHeight*0.125, windowHeight * 0.06, windowHeight * 0.035)
+                    rectMode(CORNER);
+                }
+            }
         }
         else if(sortingType == "merge sort" && runningSort == false){
             runningSort = true;
-            MergeSort(barSize);
+            MergeSort(barSize, 0, numberOfBars-1);
         }
         else if(sortingType == "heap sort" && runningSort == false){
             runningSort = true;
@@ -194,6 +224,7 @@ function draw(){
             runningSort = true;
             CountingSort(barSize);
         }
+
 
         if (detectSortingComplete(barSize)){
             restorePickingSorter();
@@ -359,6 +390,14 @@ function overButtons(){
         buttons["bubble sort"] = "not pressed";
     }
 
+    if ((mouseX > windowWidth / 2 - windowHeight * 0.06/2) && mouseX < (windowWidth / 2+windowHeight * 0.06/2) && (mouseY > windowHeight / 2 + windowHeight*0.125-windowHeight * 0.035/2) && mouseY < (windowHeight / 2 + windowHeight*0.125 + windowHeight * 0.035/2)){
+        buttons["bitonic alert"] = "pressed";
+    }
+    else{
+        buttons["bitonic alert"] = "not pressed";
+    }
+
+
     if ((mouseX > windowWidth*0.5 - windowHeight*0.14/2) && mouseX < (windowWidth*0.5+windowHeight*0.14/2) && (mouseY > windowHeight*0.07-windowHeight*0.03/2) && mouseY < (windowHeight*0.07 + windowHeight*0.03/2)){
         buttons["quick sort"] = "pressed";
     }
@@ -428,6 +467,13 @@ function mousePressed(){
         sortingType = "bubble sort";
     }
 
+    if (buttons["bitonic alert"] == "pressed"){
+        if (bitonicMsg){
+            bitonicMsg = false;
+            restorePickingSorter();
+        }
+    }
+
     if (buttons["quick sort"] == "pressed"){
         sortingType = "quick sort";
     }
@@ -466,6 +512,10 @@ function mousePressed(){
     if (buttons["sort button"] == "pressed"){
         sorting = true;
     }
+}
+
+function powerOfTwo(x) {
+    return (Math.log(x)/Math.log(2)) % 1 === 0;
 }
 
 function drawBars(){
@@ -623,7 +673,127 @@ async function SelectionSort(array){
 function BitonicSort(array){
 }
 
-function MergeSort(array){
+async function MergeSort(array, start, end){
+    if (start < end) {
+        var midPoint = Math.floor((start + end)/2);
+
+        await MergeSort(array, start, midPoint);
+        await sleep(msDelay);
+
+        await MergeSort(array, midPoint+1, end);
+        await sleep(msDelay);
+
+        await Merge(array, start, midPoint, end);
+        await sleep(msDelay);
+
+    }
+}
+
+
+async function Merge(array, start, mid, end){
+    // Merges two sorted subarrays
+
+    // Copy sub-arrays to L and R
+    var n1 = mid - start + 1; //size of L array
+    var n2 = end - mid; // size of R array
+
+    var Left = [];
+    var Right = [];
+
+    // Makes L array
+    for (let i =0; i<n1;i++){
+        Left[i] = array[start+i];
+    }
+
+    // Makes R array
+    for (let j =0; j<n2;j++){
+        Right[j] = array[mid + 1 + j];
+    }
+
+    // Match indices of sub-arrays and main array
+    var i = 0;
+    var j = 0;
+    var k = start;
+
+    // Until it reachs the end of a sub-array, pick the smallest element among L and R and place it in array
+    while (i<n1 && j<n2){
+
+        // Color handling
+        if (start == 0 && end == numberOfBars-1){
+            barColor[k] = "sorted";
+            barColor[k+1] = "pivot";
+        }
+        else {
+            barColor[k] = "pivot";
+        }
+
+        // Handling Logic
+        if (Left[i] <= Right[j]) {
+            array[k] = Left[i];
+            i += 1;
+        }
+        else{
+            array[k] = Right[j];
+            j+=1;
+        }
+
+        // More color handling
+        await sleep(msDelay/2);
+        if (start != 0 || end != numberOfBars-1){
+            barColor[k] = "default";
+        }
+        else{barColor[k+1] = "default";}
+
+        k += 1;
+
+    }
+
+    // Once we finish one sub-array place the rest of the elements as they are
+    while (i<n1){
+
+        array[k] = Left[i];
+
+        // Color handling
+        if (start == 0 && end == numberOfBars-1){
+            barColor[k] = "sorted";
+            barColor[k+1] = "pivot";
+        }
+        else {
+            barColor[k] = "pivot";
+        }
+        await sleep(msDelay/2);
+        if (start != 0 || end != numberOfBars-1){
+            barColor[k] = "default";
+        }
+        else{barColor[k+1] = "default";}
+
+
+        i += 1;
+        k += 1;
+    }
+
+    while (j<n2) {
+
+        array[k] = Right[j];
+
+        // Color handling
+        if (start == 0 && end == numberOfBars-1){
+            barColor[k] = "sorted";
+            barColor[k+1] = "pivot";
+        }
+        else {
+            barColor[k] = "pivot";
+        }
+        await sleep(msDelay/2);
+        if (start != 0 || end != numberOfBars-1){
+            barColor[k] = "default";
+        }
+        else{barColor[k+1] = "default";}
+
+
+        j += 1;
+        k += 1;
+    }
 
 }
 
@@ -634,7 +804,6 @@ async function CountingSort(array){
     let minValue = MinValue(array);
     let counterSize = maxValue + 1;
     var counter = [];
-    var sortedArray = [];
 
     // Initializing Counter
     for (let i=0; i<counterSize; i++){
