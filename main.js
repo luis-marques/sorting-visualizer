@@ -45,7 +45,8 @@ let sortingType = "not defined";
 var barColor = [];
 
 var buttons = {"bubble sort": "not pressed", "quick sort": "not pressed", "sort button": "not pressed",
-    "insertion sort": "not pressed", "selection sort": "not pressed", "bitonic sort": "not pressed", "heap sort": "not pressed"};
+    "insertion sort": "not pressed", "selection sort": "not pressed", "bitonic sort": "not pressed",
+    "heap sort": "not pressed", "counting sort": "not pressed", "merge sort": "not pressed"};
 
 function setup(){
     canvas = createCanvas(windowWidth, windowHeight);
@@ -53,7 +54,7 @@ function setup(){
     // Initializes number of bars and their size
     numberOfBars = initialNumberBars;
     for (i = 0; i < numberOfBars; i++){
-        barSize[i] = random(20, windowHeight*0.8);
+        barSize[i] = round(random(20, windowHeight*0.8));
         barColor[i] = "default";
     }
 
@@ -147,8 +148,16 @@ async function draw(){
             BitonicSort(barSize);
             restorePickingSorter();
         }
+        else if(sortingType == "merge sort"){
+            MergeSort(barSize);
+            restorePickingSorter();
+        }
         else if(sortingType == "heap sort"){
             HeapSort(barSize);
+            restorePickingSorter();
+        }
+        else if(sortingType == "counting sort"){
+            CountingSort(barSize);
             restorePickingSorter();
         }
     }
@@ -196,7 +205,13 @@ function drawSortNames(){
     text("Insertion Sort", windowWidth*0.3, windowHeight*0.04);
 
     // Merge Sort
-    fill(menuTextColor);
+    fill(255,0,0);
+    if (buttons["merge sort"]=="not pressed") {
+        fill(menuTextColor);
+    }
+    if(sortingType=="merge sort"){
+        fill(255, 73, 73);
+    }
     text("Merge Sort", windowWidth*0.3, windowHeight*0.08);
 
     // Selection Sort
@@ -228,6 +243,16 @@ function drawSortNames(){
         fill(255, 73, 73);
     }
     text("Heap Sort", windowWidth*0.4, windowHeight*0.08);
+
+    // Counting Sort
+    fill(255,0,0);
+    if (buttons["counting sort"]=="not pressed") {
+        fill(menuTextColor);
+    }
+    if(sortingType=="counting sort"){
+        fill(255, 73, 73);
+    }
+    text("Counting Sort", windowWidth*0.5, windowHeight*0.08);
 }
 
 function drawSortRectangles(){
@@ -241,6 +266,8 @@ function drawSortRectangles(){
     selectionRect = rect(windowWidth*0.4, windowHeight*0.03, windowHeight*0.19, windowHeight*0.03);
     bitonicRect = rect(windowWidth*0.5, windowHeight*0.03, windowHeight*0.155, windowHeight*0.03);
     heapRect = rect(windowWidth*0.4, windowHeight*0.07, windowHeight*0.135, windowHeight*0.035);
+    countingRect = rect(windowWidth*0.5, windowHeight*0.07, windowHeight*0.185, windowHeight*0.035);
+    mergeRect = rect(windowWidth*0.3, windowHeight*0.07, windowHeight*0.15, windowHeight*0.035);
 
     sortRect = rect(windowWidth*0.9, windowHeight*0.05, windowHeight*0.085, windowHeight*0.04);
 
@@ -294,6 +321,21 @@ function overButtons(){
     else{
         buttons["heap sort"] = "not pressed";
     }
+
+    if ((mouseX > windowWidth*0.5 - windowHeight*0.185/2) && mouseX < (windowWidth*0.5+windowHeight*0.185/2) && (mouseY > windowHeight*0.07-windowHeight*0.035/2) && mouseY < (windowHeight*0.07 + windowHeight*0.035/2)){
+        buttons["counting sort"] = "pressed";
+    }
+    else{
+        buttons["counting sort"] = "not pressed";
+    }
+
+    if ((mouseX > windowWidth*0.3 - windowHeight*0.15/2) && mouseX < (windowWidth*0.3+windowHeight*0.15/2) && (mouseY > windowHeight*0.07-windowHeight*0.035/2) && mouseY < (windowHeight*0.07 + windowHeight*0.035/2)){
+        buttons["merge sort"] = "pressed";
+    }
+    else{
+        buttons["merge sort"] = "not pressed";
+    }
+
 }
 
 function mousePressed(){
@@ -316,6 +358,12 @@ function mousePressed(){
     }
     if (buttons["heap sort"] == "pressed"){
         sortingType = "heap sort";
+    }
+    if (buttons["counting sort"] == "pressed"){
+        sortingType = "counting sort";
+    }
+    if (buttons["merge sort"] == "pressed"){
+        sortingType = "merge sort";
     }
 
     if (buttons["sort button"] == "pressed"){
@@ -468,6 +516,71 @@ async function SelectionSort(array){
 function BitonicSort(array){
 }
 
+function MergeSort(array){
+
+}
+
+
+
+async function CountingSort(array){
+    let maxValue = MaxValue(array);
+    let minValue = MinValue(array);
+    let counterSize = maxValue + 1;
+    var counter = [];
+    var sortedArray = [];
+
+    // Initializing Counter
+    for (let i=0; i<counterSize; i++){
+        counter[i] = 0;
+    }
+
+    // Counting Elements
+    for (let i=0; i<array.length; i++){
+        counter[array[i]] += 1;
+        barColor[i] = "pivot";
+        await sleep(msDelay/2);
+        barColor[i] = "default";
+    }
+
+    let j = 0;
+    for (let i=minValue; i<=maxValue; i++){
+        barColor[i] = "pivot";
+        while(counter[i]>0){
+            array[j] = i;
+            barColor[j] = "pivot";
+            j += 1;
+            barColor[j] = "partition";
+            await sleep(msDelay/4);
+            barColor[j-1] = "default";
+            barColor[j] = "default";
+            counter[i] -= 1;
+        }
+        barColor[i] = "default";
+    }
+}
+
+function MaxValue(array){
+    let max = array[0];
+
+    for (let i=1; i<array.length; i++){
+        if (array[i] > max){
+            max = array[i];
+        }
+    }
+    return max;
+}
+
+function MinValue(array){
+    let min = array[0];
+
+    for (let i=1; i<array.length; i++){
+        if (array[i] < min){
+            min = array[i];
+        }
+    }
+    return min;
+}
+
 async function HeapSort(array) {
 
     heap_size = array.length;
@@ -542,7 +655,7 @@ function updateNumberBars(){
         barColor = []
         numberOfBars = slider.value();
         for (i = 0; i < numberOfBars; i++) {
-            barSize[i] = random(20, windowHeight * 0.8);
+            barSize[i] = round(random(20, windowHeight * 0.8));
             barColor[i] = "default";
         }
     }
