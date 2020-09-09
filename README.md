@@ -13,7 +13,7 @@ It includes the following sorting algorithms:
 * Bitonic Sort
 * Counting Sort
 
-You can check it out [here!](https://luis-marques.github.io/sorting-visualization/)
+You can check it out [here!](https://luis-marques.github.io/sorting-visualizer/)
 
 ## Animation Speed
 
