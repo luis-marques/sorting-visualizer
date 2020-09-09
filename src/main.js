@@ -1,8 +1,10 @@
 /*
+ADD MORE COMMENTS
+
 - Selection Sort (w sorted color)
 - Insertion Sort (very questionable sorted color)
 - Quick Sort (w sorted color)
- - Merge Sort (w questionable sorted color)
+- Merge Sort (w questionable sorted color)
 - Heap Sort (w sorted color)
 - Bubble Sort (w sorted color)
 - Bitonic Sort (w questionable sorted color
@@ -10,7 +12,6 @@
 Put total time it took to sort the elements
 (BONUS: number of comparisons and number of array accesses)
 could show the value milissecond delay added to the visualization
-
 
 Could add legend on the bottom explaining what the colors are
 
@@ -931,8 +932,6 @@ async function BuildMaxHeap(array){
     }
 }
 
-
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -968,7 +967,6 @@ function updateDelay(){
     }
 }
 
-``
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
