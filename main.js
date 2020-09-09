@@ -2,28 +2,20 @@
 - Selection Sort (w sorted color)
 - Insertion Sort (very questionable sorted color)
 - Quick Sort (w sorted color)
-Merge Sort
+ - Merge Sort (w questionable sorted color)
 - Heap Sort (w sorted color)
-Radix Sort
-Shell Sort
 - Bubble Sort (w sorted color)
-Cocktail Shaker Sort
-Gnome Sort
-Bitonic Sort
-Bogo Sort
+- Bitonic Sort (w questionable sorted color
 
 Put total time it took to sort the elements
 (BONUS: number of comparisons and number of array accesses)
 could show the value milissecond delay added to the visualization
 
 
-Sorting has ended when all bars are purple
-
 Could add legend on the bottom explaining what the colors are
 
 Heap visualization is kinda week gonna think about which parts are worth coloring
 
-While Sorting Display Time Complexity Somewhere (bot left?)
  */
 
 
@@ -184,7 +176,7 @@ async function draw(){
         else if(sortingType == "bitonic sort" && runningSort == false){
             if (powerOfTwo(numberOfBars)) {
                 runningSort = true;
-                BitonicSort(barSize);
+                BitonicSort(barSize, 0, numberOfBars, 1);
             }
             else{
                 bitonicMsg = true;
@@ -224,7 +216,6 @@ async function draw(){
             runningSort = true;
             CountingSort(barSize);
         }
-
 
         if (detectSortingComplete(barSize)){
             restorePickingSorter();
@@ -670,8 +661,47 @@ async function SelectionSort(array){
 
 }
 
-function BitonicSort(array){
+async function BitonicSort(array, start, arraySize, direction){
+    if (arraySize>1){
+        let k = arraySize/2;
+
+        await BitonicSort(array, start, k, 1);
+        await BitonicSort(array, start+k, k, 0);
+        await BitonicMerge(array, start, arraySize, direction);
+    }
 }
+
+async function BitonicSwap(array, i, j, direction){
+    barColor[i] = "pivot";
+    barColor[j] = "partition";
+    if ((direction==1 && array[i]>array[j]) || (direction==0 && array[i]<array[j])){
+        await sleep(msDelay);
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    else{await sleep(msDelay);}
+    barColor[i] = "default";
+    barColor[j] = "default";
+}
+
+async function BitonicMerge(array, start, numberElements, direction){
+    if (numberElements>1){
+        let k = numberElements/2;
+        for (let i=start; i<start + k; i++){
+            await BitonicSwap(array, i, i+k, direction);
+        }
+        await BitonicMerge(array, start, k, direction);
+        await BitonicMerge(array, start+k, k, direction);
+        if (numberElements == numberOfBars){
+            for (i =0; i<numberOfBars;i++){
+                await sleep(msDelay/2);
+                barColor[i] = "sorted";
+            }
+        }
+    }
+}
+
 
 async function MergeSort(array, start, end){
     if (start < end) {
