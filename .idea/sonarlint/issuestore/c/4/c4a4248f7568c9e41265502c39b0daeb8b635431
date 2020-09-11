@@ -1,25 +1,24 @@
 
-Ojavascript:S1117À"+'i' is already declared in the upper scope.(†ùˆÍ8¬¤›…Ç.
-Tjavascript:S1117Å"+'j' is already declared in the upper scope.(×‚ıÅüÿÿÿÿ8¬¤›…Ç.
-njavascript:S905­"FExpected an assignment or function call and instead saw an expression.(›®ø¶øÿÿÿÿ8¬¤›…Ç.
-†javascript:S2703ı"bAdd the "let", "const" or "var" keyword to this declaration of "generateRect" to make it explicit.(ƒÊ»Ì8¬¤›…Ç.
-ƒjavascript:S2703ô"_Add the "let", "const" or "var" keyword to this declaration of "quickRect" to make it explicit.(åÍ¢Ñ8¬¤›…Ç.
-„javascript:S2703D"aAdd the "let", "const" or "var" keyword to this declaration of "sliderNBars" to make it explicit.(óí„Æ8¬¤›…Ç.
-€javascript:S2703\"^Add the "let", "const" or "var" keyword to this declaration of "barWidth" to make it explicit.(ÊöË8¬¤›…Ç.
-Œjavascript:S2703ö"cAdd the "let", "const" or "var" keyword to this declaration of "selectionRect" to make it explicit.(Îª‘ˆûÿÿÿÿ8¬¤›…Ç.
-…javascript:S2703÷"aAdd the "let", "const" or "var" keyword to this declaration of "bitonicRect" to make it explicit.(ò›áõ8¬¤›…Ç.
-‡javascript:S2703ü"^Add the "let", "const" or "var" keyword to this declaration of "sortRect" to make it explicit.(–­úïıÿÿÿÿ8¬¤›…Ç.
-~javascript:S2703:"\Add the "let", "const" or "var" keyword to this declaration of "canvas" to make it explicit.(‡ƒ^8¬¤›…Ç.
-javascript:S2703>"WAdd the "let", "const" or "var" keyword to this declaration of "i" to make it explicit.(õÑÃÜıÿÿÿÿ8¬¤›…Ç.
-†javascript:S2703ù"bAdd the "let", "const" or "var" keyword to this declaration of "countingRect" to make it explicit.(¡ŠÂÏ8¬¤›…Ç.
-ƒjavascript:S2703ú"_Add the "let", "const" or "var" keyword to this declaration of "mergeRect" to make it explicit.(úïÖ¥8¬¤›…Ç.
-‚javascript:S2703ø"^Add the "let", "const" or "var" keyword to this declaration of "heapRect" to make it explicit.(‡¼î8¬¤›…Ç.
-Œjavascript:S2703Y"dAdd the "let", "const" or "var" keyword to this declaration of "widthBarCanvas" to make it explicit.(½¼æûÿÿÿÿ8¬¤›…Ç.
-†javascript:S2703F"cAdd the "let", "const" or "var" keyword to this declaration of "sliderMsDelay" to make it explicit.( èÏé8¬¤›…Ç.
-Œjavascript:S2703õ"cAdd the "let", "const" or "var" keyword to this declaration of "insertionRect" to make it explicit.(¢Ñ˜ûûÿÿÿÿ8¬¤›…Ç.
-~javascript:S2703ô"[Add the "let", "const" or "var" keyword to this declaration of "pivot" to make it explicit.(±ï
-8¬¤›…Ç.
-€javascript:S2703¬"WAdd the "let", "const" or "var" keyword to this declaration of "j" to make it explicit.(¥õçõûÿÿÿÿ8¬¤›…Ç.
-ˆjavascript:S2703Ù"_Add the "let", "const" or "var" keyword to this declaration of "heap_size" to make it explicit.(Á’ÿ¶ıÿÿÿÿ8¬¤›…Ç.
-~javascript:S2703ø"ZAdd the "let", "const" or "var" keyword to this declaration of "temp" to make it explicit.(ôıŠÏ8¬¤›…Ç.
-‰javascript:S2703ó"`Add the "let", "const" or "var" keyword to this declaration of "bubbleRect" to make it explicit.(«Ú”Úşÿÿÿÿ8¬¤›…Ç.
+~javascript:S2703÷"ZAdd the "let", "const" or "var" keyword to this declaration of "temp" to make it explicit.(ôıŠÏ8Ÿä‡œÇ.
+‰javascript:S2703ò"`Add the "let", "const" or "var" keyword to this declaration of "bubbleRect" to make it explicit.(«Ú”Úşÿÿÿÿ8Ÿä‡œÇ.
+‡javascript:S2703û"^Add the "let", "const" or "var" keyword to this declaration of "sortRect" to make it explicit.(–­úïıÿÿÿÿ8Ÿä‡œÇ.
+„javascript:S2703D"aAdd the "let", "const" or "var" keyword to this declaration of "sliderNBars" to make it explicit.(óí„Æ8Ÿä‡œÇ.
+€javascript:S2703\"^Add the "let", "const" or "var" keyword to this declaration of "barWidth" to make it explicit.(ÊöË8Ÿä‡œÇ.
+javascript:S2703>"WAdd the "let", "const" or "var" keyword to this declaration of "i" to make it explicit.(õÑÃÜıÿÿÿÿ8Ÿä‡œÇ.
+ˆjavascript:S2703ÿ"_Add the "let", "const" or "var" keyword to this declaration of "heap_size" to make it explicit.(Á’ÿ¶ıÿÿÿÿ8‡·¥œÇ.
+‚javascript:S2703÷"^Add the "let", "const" or "var" keyword to this declaration of "heapRect" to make it explicit.(‡¼î8Ÿä‡œÇ.
+Œjavascript:S2703õ"cAdd the "let", "const" or "var" keyword to this declaration of "selectionRect" to make it explicit.(Îª‘ˆûÿÿÿÿ8Ÿä‡œÇ.
+Œjavascript:S2703ô"cAdd the "let", "const" or "var" keyword to this declaration of "insertionRect" to make it explicit.(¢Ñ˜ûûÿÿÿÿ8Ÿä‡œÇ.
+†javascript:S2703ø"bAdd the "let", "const" or "var" keyword to this declaration of "countingRect" to make it explicit.(¡ŠÂÏ8Ÿä‡œÇ.
+†javascript:S2703ü"bAdd the "let", "const" or "var" keyword to this declaration of "generateRect" to make it explicit.(ƒÊ»Ì8Ÿä‡œÇ.
+~javascript:S2703ó"[Add the "let", "const" or "var" keyword to this declaration of "pivot" to make it explicit.(±ï
+8Ÿä‡œÇ.
+~javascript:S2703:"\Add the "let", "const" or "var" keyword to this declaration of "canvas" to make it explicit.(‡ƒ^8Ÿä‡œÇ.
+…javascript:S2703ö"aAdd the "let", "const" or "var" keyword to this declaration of "bitonicRect" to make it explicit.(ò›áõ8Ÿä‡œÇ.
+€javascript:S2703«"WAdd the "let", "const" or "var" keyword to this declaration of "j" to make it explicit.(¥õçõûÿÿÿÿ8Ÿä‡œÇ.
+Œjavascript:S2703Y"dAdd the "let", "const" or "var" keyword to this declaration of "widthBarCanvas" to make it explicit.(½¼æûÿÿÿÿ8Ÿä‡œÇ.
+Tjavascript:S1117ë"+'j' is already declared in the upper scope.(×‚ıÅüÿÿÿÿ8‡·¥œÇ.
+†javascript:S2703F"cAdd the "let", "const" or "var" keyword to this declaration of "sliderMsDelay" to make it explicit.( èÏé8Ÿä‡œÇ.
+Ojavascript:S1117æ"+'i' is already declared in the upper scope.(†ùˆÍ8‡·¥œÇ.
+ƒjavascript:S2703ù"_Add the "let", "const" or "var" keyword to this declaration of "mergeRect" to make it explicit.(úïÖ¥8Ÿä‡œÇ.
+ƒjavascript:S2703ó"_Add the "let", "const" or "var" keyword to this declaration of "quickRect" to make it explicit.(åÍ¢Ñ8Ÿä‡œÇ.

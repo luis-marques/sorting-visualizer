@@ -1,7 +1,6 @@
 # Sorting Algorithms Visualizer
 
-
-
+[](./pics/home_page.png)
 It includes the following sorting algorithms:
 
 * Bubble Sort
@@ -13,7 +12,7 @@ It includes the following sorting algorithms:
 * Bitonic Sort
 * Counting Sort
 
-You can check it out [here!](https://luis-marques.github.io/sorting-visualizer/)
+You can check it at https://luis-marques.github.io/sorting-visualizer/ (if on mobile, open in landscape mode and refresh).
 
 ## Animation Speed
 

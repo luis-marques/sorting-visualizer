@@ -1,6 +1,13 @@
 /*
 ADD MORE COMMENTS
 
+CORRECT AMMOUNT OF ANIMATION DELAY PER ALGORITHM
+
+eg merge sort is way too slow for most slider values
+
+need to adjust the amount of delay per algo to make the animations speed for that algo reasonable
+(ie 0 should be slow and 100 fast, currently merge is slow until like 80)
+
 - Selection Sort (w sorted color)
 - Insertion Sort (very questionable sorted color)
 - Quick Sort (w sorted color)
