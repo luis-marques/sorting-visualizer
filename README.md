@@ -1,6 +1,8 @@
 # Sorting Algorithms Visualizer
 
-[](./pics/home_page.png)
+![home_page](https://github.com/luis-marques/sorting-visualizer/blob/master/pics/home_page.png?raw=true)
+
+
 It includes the following sorting algorithms:
 
 * Bubble Sort
