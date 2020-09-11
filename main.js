@@ -126,7 +126,10 @@ async function draw(){
 
     if (sorting==false) {
         // Sort button
-        if (buttons["sort button"]=="not pressed") {
+        if (sortingType=="not defined"){
+            fill(109, 116, 154);
+        }
+        else if (buttons["sort button"]=="not pressed") {
             fill(menuTextColor);
         }
         else{
@@ -164,6 +167,7 @@ async function draw(){
 
         sliderNBars.hide();
         sliderMsDelay.hide();
+
 
         if (sortingType == "bubble sort" && runningSort == false){
             runningSort = true;
@@ -459,6 +463,8 @@ function overButtons(){
         buttons["merge sort"] = "not pressed";
     }
 
+
+
 }
 
 function mousePressed(){
@@ -509,7 +515,8 @@ function mousePressed(){
     }
 
     if (buttons["sort button"] == "pressed"){
-        sorting = true;
+        if(sortingType!="not defined"){
+        sorting = true;}
     }
 }
 
@@ -550,7 +557,27 @@ function drawBars(){
     }
 }
 
+function DelayLimit(value, direction){
+    // direction = 1, limits faster end of spectrum
+    // direction = 0, limits slower end of spectrum
+    let delay;
+    if (direction==1){
+        if(msDelay<value){delay=value;}
+        else{delay=msDelay;}
+        return delay;
+    }
+    else{
+        if(msDelay>value){delay=value;}
+        else{delay=msDelay;}
+        return delay;
+    }
+}
+
 async function BubbleSort(array){
+
+    // if msDelay = 0, looks bad :(
+    var delay = DelayLimit(20, 1);
+
     for (i=0; i<array.length; i++){
         for (j=0; j<array.length-1-i;j++){
             barColor[j] = "pivot";
@@ -559,7 +586,7 @@ async function BubbleSort(array){
             var b = array[j+1];
 
             if (a>b){
-                await ASYNCswap(array, j, j+1);
+                await ASYNCswap(array, j, j+1,delay);
             }
 
             barColor[j] = "default";
@@ -603,14 +630,14 @@ async function partition(array, start, end){
 
     for (let i=start; i<end;i++){
         if (array[i] < pivotValue){
-            await ASYNCswap(array, i, pivotIndex);
+            await ASYNCswap(array, i, pivotIndex, msDelay/2);
             barColor[pivotIndex] = "default"
             pivotIndex++;
             barColor[pivotIndex] = "pivot"
         }
     }
 
-    await ASYNCswap(array, pivotIndex, end);
+    await ASYNCswap(array, pivotIndex, end, msDelay/2);
 
     for (let i = start; i<end; i++){
         if (i != pivotIndex) {
@@ -622,6 +649,10 @@ async function partition(array, start, end){
 }
 
 async function InsertionSort(array){
+
+    // if msDelay = 0, looks bad :(
+    var delay = DelayLimit(20, 1);
+
     for (i=1; i<array.length;i++){
 
         pivot = array[i];
@@ -632,22 +663,27 @@ async function InsertionSort(array){
         barColor[j] = "partition";
 
         while (j >=0 && array[j] > pivot){
-            await ASYNCswap(array, j+1, j);
+            await ASYNCswap(array, j+1, j, delay);
             j -=1;
-            barColor[j] = "partition";
-            barColor[j+1] = "default";
+            barColor[j+1] = "partition";
+            if (j+2 != i){
+            barColor[j+2] = "default";}
         }
 
-        barColor[j]="default"
+        barColor[j+1]="default"
         barColor[temp] = "default";
     }
-    await sleep(msDelay);
+    await sleep(delay/2);
     for (i=0; i<array.length;i++){
         barColor[i] = "sorted";
+        await sleep(delay/2);
     }
 }
 
 async function SelectionSort(array){
+    
+    // if msDelay = 0, looks bad :(
+    var delay = DelayLimit(20, 1);
 
     for (i=0;i<array.length;i++){
 
@@ -659,10 +695,10 @@ async function SelectionSort(array){
             if (array[j] < array[minIndex]){
                 minIndex = j;
             }
-            await sleep(msDelay/2);
+            await sleep(delay);
             barColor[j] = "default";
         }
-        await ASYNCswap(array, minIndex, i);
+        await ASYNCswap(array, minIndex, i, delay);
         barColor[i] = "sorted";
     }
 
@@ -680,20 +716,24 @@ async function BitonicSort(array, start, arraySize, direction){
 }
 
 async function BitonicSwap(array, i, j, direction){
+
+    var delay = DelayLimit(120, 1);
+
     barColor[i] = "pivot";
     barColor[j] = "partition";
     if ((direction==1 && array[i]>array[j]) || (direction==0 && array[i]<array[j])){
-        await sleep(msDelay);
+        await sleep(delay);
         var temp = array[i];
         array[i] = array[j];
         array[j] = temp;
     }
-    else{await sleep(msDelay);}
+    else{await sleep(delay);}
     barColor[i] = "default";
     barColor[j] = "default";
 }
 
 async function BitonicMerge(array, start, numberElements, direction){
+    var delay = DelayLimit(120, 1);
     if (numberElements>1){
         let k = numberElements/2;
         for (let i=start; i<start + k; i++){
@@ -703,7 +743,7 @@ async function BitonicMerge(array, start, numberElements, direction){
         await BitonicMerge(array, start+k, k, direction);
         if (numberElements == numberOfBars){
             for (i =0; i<numberOfBars;i++){
-                await sleep(msDelay/2);
+                await sleep(delay);
                 barColor[i] = "sorted";
             }
         }
@@ -716,13 +756,13 @@ async function MergeSort(array, start, end){
         var midPoint = Math.floor((start + end)/2);
 
         await MergeSort(array, start, midPoint);
-        await sleep(msDelay);
+        await sleep(msDelay/2);
 
         await MergeSort(array, midPoint+1, end);
-        await sleep(msDelay);
+        await sleep(msDelay/2);
 
         await Merge(array, start, midPoint, end);
-        await sleep(msDelay);
+        await sleep(msDelay/2);
 
     }
 }
@@ -838,6 +878,10 @@ async function Merge(array, start, mid, end){
 
 
 async function CountingSort(array){
+
+    // Fast enough speed
+    var delay = DelayLimit(120, 1);
+
     let maxValue = MaxValue(array);
     let minValue = MinValue(array);
     let counterSize = maxValue + 1;
@@ -852,7 +896,7 @@ async function CountingSort(array){
     for (let i=0; i<array.length; i++){
         counter[array[i]] += 1;
         barColor[i] = "pivot";
-        await sleep(msDelay/2);
+        await sleep(delay/2);
         barColor[i] = "default";
     }
 
@@ -862,7 +906,7 @@ async function CountingSort(array){
             array[j] = i;
             barColor[j] = "sorted";
             j += 1;
-            await sleep(msDelay/2);
+            await sleep(delay/2);
             counter[i] -= 1;
         }
     }
@@ -949,8 +993,8 @@ function swap(array, i, j){
     array[j] = temp;
 }
 
-async function ASYNCswap(array, i, j){
-    await sleep(msDelay/2);
+async function ASYNCswap(array, i, j, delay = msDelay/2){
+    await sleep(delay);
     var temp = array[i];
     array[i] = array[j];
     array[j] = temp;
